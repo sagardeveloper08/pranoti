@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "5d362ac6-e058-4853-a417-ae67e3bac4cb",
+		"name": "interviewTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"sagar\",\r\n    \"lastName\":\"singh\",\r\n    \"phone\":\"8779742206\",\r\n    \"email\":\"singhjha@gmal.com\",\r\n    \"password\":\"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/register/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"register",
+						"user"
+					]
+				},
+				"description": "below collection is to register the user "
+			},
+			"response": []
+		},
+		{
+			"name": "login(Auth)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"singhjha@gmal.com\",\r\n    \"password\":\"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/verify/auth/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"verify",
+						"auth",
+						"user"
+					]
+				},
+				"description": "after registring , user need to login and get the token so user can perform following operations\r\n\r\n*token will generated after only login*"
+			},
+			"response": []
+		},
+		{
+			"name": "get user details with id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjFlYzNkYzRmYmU0N2Q0ZWIwYmE3MCIsImlhdCI6MTY3NjgwMDcwNiwiZXhwIjoxNjc3NDA1NTA2fQ.0tQ6RqMQn94e-01l4udINx8DbE2NU1GBvOu8KDKq3pM",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/get/user/63f1ec3dc4fbe47d4eb0ba70",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"get",
+						"user",
+						"63f1ec3dc4fbe47d4eb0ba70"
+					]
+				},
+				"description": "Step 1 : need to login and get token \r\nstep 2: use this api to get details of user with id \r\n\r\n*Authorization headers is required*"
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjFlYzNkYzRmYmU0N2Q0ZWIwYmE3MCIsImlhdCI6MTY3NjgwMDcwNiwiZXhwIjoxNjc3NDA1NTA2fQ.0tQ6RqMQn94e-01l4udINx8DbE2NU1GBvOu8KDKq3pM",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"sagar@gmail.com\",\r\n    \"lastName\":\"singh\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/update/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"update",
+						"user"
+					]
+				},
+				"description": "route is to update user using id\r\n\r\n*Authorization header is needed*"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjI2ZTAxZTk5ZTZkMDZhZjk0MDQxNSIsImlhdCI6MTY3NjgzMjMwOCwiZXhwIjoxNjc3NDM3MTA4fQ.HHINxC9J6FVPv8ekcbs8hW-ATqQDme62483mgGbf5UA",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/delete/user/63f26e01e99e6d06af940415",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"delete",
+						"user",
+						"63f26e01e99e6d06af940415"
+					]
+				},
+				"description": "delete user using this routes\r\n\r\n*authorization needed*"
+			},
+			"response": []
+		},
+		{
+			"name": "Disable user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjI2ZTk1YzNkZTRjYjYxZTlmYmQxZSIsImlhdCI6MTY3NjgzMjQwOSwiZXhwIjoxNjc3NDM3MjA5fQ.SWY3I6Eij3G2F0thfZ1z0UEQ-qFHZfgHssB3pKghGP8",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isDisabled\":false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/isdsiable/user",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"isdsiable",
+						"user"
+					]
+				},
+				"description": "This route is used to disable and unable the user\r\n*Authorization is needed*"
+			},
+			"response": []
+		},
+		{
+			"name": "filter user using query",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZjI2ZTk1YzNkZTRjYjYxZTlmYmQxZSIsImlhdCI6MTY3NjgzMzQ5NCwiZXhwIjoxNjc3NDM4Mjk0fQ.C-qU7W91FI98iCIGykKQObvXELNUnkafZ2qq9Ehr2uw",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/users/?isDisabled=false",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					],
+					"query": [
+						{
+							"key": "phone",
+							"value": "8779742206",
+							"disabled": true
+						},
+						{
+							"key": "firstName",
+							"value": "Sonam",
+							"disabled": true
+						},
+						{
+							"key": "isDisabled",
+							"value": "false"
+						}
+					]
+				},
+				"description": "route to filter user using query parameter\r\n"
+			},
+			"response": []
+		}
+	]
+}
