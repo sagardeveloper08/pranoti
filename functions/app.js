@@ -1,20 +1,20 @@
 // intialzing the dependinces
 const express = require('express');
 const cors = require('cors');
-const config = require('./config/config')
+const config = require('../config/config')
 const helmet = require('helmet');
 const serverless = require("serverless-http");
 
 // importing logger.js in app.js
-const logger = require('./utlis/logger')
+const logger = require('../utlis/logger')
 app.use(cors())
 
 
 // database connection
-require('./database/db')
+require('../database/db')
 
 // requiring routes dependencies
-const userRoutes = require('./routes/userRoutes')
+const userRoutes = require('../routes/userRoutes')
 
 // defining the port on which application should run
 port = config.port || 5000
@@ -58,13 +58,13 @@ app.get('/', (req, res) => {
 // app.use('/api/v1', userRoutes)
 app.use(`/.netlify/functions/api`, userRoutes);
 
-app.listen(port, () => {
-    console.table([
-        {
-            port: `${port}`
-        }
-    ])
-})
+// app.listen(port, () => {
+//     console.table([
+//         {
+//             port: `${port}`
+//         }
+//     ])
+// })
 
 module.exports = app;
 module.exports.handler = serverless(app);
