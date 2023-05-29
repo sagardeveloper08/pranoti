@@ -5,6 +5,7 @@ const config = require('./config/config')
 const helmet = require('helmet');
 // importing logger.js in app.js
 const logger = require('./utlis/logger')
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // database connection
 require('./database/db')
@@ -24,7 +25,7 @@ app.use(express.json())
 app.use(cors())
 // defing logs // Middleware to log requests
 
-app.use((err,req, res, next) => {
+app.use((err, req, res, next) => {
 
     logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     next();
@@ -38,7 +39,13 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }))
 
 // defining routes
-app.use('/api/v1', userRoutes)
+const apiProxy = createProxyMiddleware('/api', {
+    target: 'http://13.127.125.153:5000/api/v1/register/user', // Replace with your HTTP API endpoint
+    changeOrigin: true,
+});
+
+app.use(apiProxy);
+// app.use('/api/v1', userRoutes)
 
 // Error handling
 app.use((err, req, res, next) => {
