@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const config = require('./config/config')
 const helmet = require('helmet');
+const serverless = require("serverless-http");
+
 // importing logger.js in app.js
 const logger = require('./utlis/logger')
 app.use(cors())
@@ -40,10 +42,6 @@ app.use(express.urlencoded({ extended: true }))
 
 // defining routes
 
-
-// app.use(apiProxy);
-app.use('/api/v1', userRoutes)
-
 // Error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -56,6 +54,9 @@ app.get('/', (req, res) => {
         message: "server responding "
     })
 })
+// app.use(apiProxy);
+// app.use('/api/v1', userRoutes)
+app.use(`/.netlify/functions/api`, userRoutes);
 
 app.listen(port, () => {
     console.table([
@@ -64,3 +65,8 @@ app.listen(port, () => {
         }
     ])
 })
+
+module.exports = app;
+module.exports.handler = serverless(app);
+
+
