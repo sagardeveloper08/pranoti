@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
     })
 })
 // app.use(apiProxy);
-// app.use('/api/v1', userRoutes)
+app.use('/api/v1', userRoutes)
 // app.use(`/.netlify/functions/api`, userRoutes);
 
 app.listen(port, () => {
