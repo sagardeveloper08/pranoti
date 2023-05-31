@@ -14,8 +14,11 @@ require('./database/db')
 // requiring routes dependencies
 const userRoutes = require('./routes/userRoutes')
 
-// defining the port on which application should run
-port = config.port || 5000
+// for google cloud
+port = process.env.PORT || 5000
+
+// defining the port on which application should run for local
+// port = config.port || 5000
 
 //usng dependencies
 const app = express()
