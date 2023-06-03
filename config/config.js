@@ -10,4 +10,6 @@ module.exports = {
     mongodburl: process.env.mongodburl,
     version: process.env.version,
     JWT: process.env.JWt,
+    accessKeyId:process.env.accessKeyId,
+    secretAccessKey:process.env.secretAccessKey
 }

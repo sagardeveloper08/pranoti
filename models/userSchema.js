@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const config = require('../config/config')
+const jwt = require('jsonwebtoken')
 
 
 const userSchema = new mongoose.Schema({
@@ -21,32 +22,52 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dog_name: {
+    dogName: {
         type: String,
         required: true
     },
-    dog_breed: {
+    dogBreed: {
         type: String,
         required: true
     },
-    dog_age: {
+    dogAge: {
         type: String,
         required: true
     },
     message: {
         type: String,
         required: true
-    }
+    },
+    password: {
+        type: String
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user', 'trainer'],
+        default: 'user'
+    },
+    leadFor: {
+        type: String,
+        enum: ['homeboarding', 'pet_training'],
+        default:"pet_training"
+    },
+    leadType: {
+        type: String,
+        enum: ['contact', 'trail', 'postive', 'negative'],
+        default:'contact'
+    },
+    created_at: { type: Date, default: Date.now },
+
 },
     { timestamps: true }
 )
 
 // code to generated jwt token 
 
-// userSchema.methods.getJwtToken = function () {
-//     return jwt.sign({ id: this._id }, config.JWT, {
-//         expiresIn: '7d'
-//     })
-// }
+userSchema.methods.getJwtToken = function () {
+    return jwt.sign({ id: this._id }, config.JWT, {
+        expiresIn: '7d'
+    })
+}
 
 module.exports = mongoose.model('User', userSchema)

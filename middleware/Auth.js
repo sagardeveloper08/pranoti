@@ -28,3 +28,12 @@ exports.isAuthenticated = async (req, res, next) => {
     }
 }
 
+exports.authorizeRoles = (...roles) => {
+    return async (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            console.log(req.user.role, 'roles');
+            return next(res.json("roles not allowed"))
+        }
+        next()
+    }
+}

@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const config = require('./config/config')
 const helmet = require('helmet');
+const multer = require('multer');
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const videoController = require('./controller/videoController');
 
 // importing logger.js in app.js
 const logger = require('./utlis/logger')
@@ -13,6 +17,7 @@ require('./database/db')
 
 // requiring routes dependencies
 const userRoutes = require('./routes/userRoutes')
+const videos = require('./routes/VideoRoutes')
 
 // for google cloud
 port = process.env.PORT || 5000
@@ -56,8 +61,40 @@ app.get('/', (req, res) => {
         message: "server responding "
     })
 })
+// 
+
+
+const s3 = new AWS.S3({
+    accessKeyId: config.accessKeyId,
+    secretAccessKey: config.secretAccessKey,
+    // region: 'YOUR_AWS_REGION'
+    apiVersion: '2006-03-01' // Add this line
+
+});
+
+// Configure Multer middleware
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'thepetwhisperervideos',
+        acl: 'public-read',
+        metadata: function (req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString()); // Use a unique key for each file
+        }
+    })
+});
+// console.log(upload,'upload')
+const blogRoutes = require('./routes/blogRoutes');
+
 // app.use(apiProxy);
+app.use('/api/v1', blogRoutes);
 app.use('/api/v1', userRoutes)
+app.use('/api/v1',videos)
+app.post('/upload', upload.single('video'), videoController.uploadVideo);
+
 // app.use(`/.netlify/functions/api`, userRoutes);
 
 app.listen(port, () => {
