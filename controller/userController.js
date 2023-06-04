@@ -95,8 +95,6 @@ Message: ${message}`;
             })
                 .then(message => console.log('Message sent to the admin:', message.sid))
                 .catch(error => console.log('Error sending message to the admin:', error));
-
-
             // 
             return res.status(200).json({
                 success: true,
