@@ -39,7 +39,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     password: {
-        type: String
+        type: String,
+        default:"the_pet_Whisperer@1237896"
     },
     role: {
         type: String,
