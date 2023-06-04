@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const logger = require("../utlis/logger")
 // const { google } = require('googleapis')
 const twilio = require('twilio');
-
+const config = require('../config/config')
 // const authentication = async () => {
 //     const auth = new google.auth.GoogleAuth({
 //         keyFile: "keys.json",
@@ -29,9 +29,12 @@ exports.registeruser = catchAsyncErrors(async (req, res) => {
         const {
             Name, email, phone, location, dogName, dogBreed, dogAge, message, role, password, leadFor, leadType
         } = req.body
-        // 
+        // twillo
+        const accountSid = config.twilioSid;
+        const authToken = config.twilloAuthToken;
+        // const client = twilio(accountSid, authToken);
 
-       
+
         const client = twilio(accountSid, authToken);
 
 
@@ -63,13 +66,13 @@ exports.registeruser = catchAsyncErrors(async (req, res) => {
             logger.info('User registered successfully');
             // 
             const customerMessage = `
-            The Pet Whisperer 
-            Thank you for contacting. We will contact you soon
-            .`;
+            Greeting From Pet Whisperer 
+Thank you for contacting.
+We will contact you soon in next 12 hours.`;
             client.messages.create({
                 body: customerMessage,
-                from: '+13029244725',
-                to: phone // The customer's phone number
+                from: config.twilloNumber,
+                to: `+91${phone}` // The customer's phone number
             })
                 .then(message => console.log('Message sent to the customer:', message.sid))
                 .catch(error => console.log('Error sending message to the customer:', error));
@@ -87,8 +90,8 @@ Dog Age: ${dogAge}
 Message: ${message}`;
             client.messages.create({
                 body: adminMessage,
-                from: '+13029244725',
-                to: '+918779742206' // The admin's phone number
+                from: config.twilloNumber,
+                to: config.number // The admin's phone number
             })
                 .then(message => console.log('Message sent to the admin:', message.sid))
                 .catch(error => console.log('Error sending message to the admin:', error));
