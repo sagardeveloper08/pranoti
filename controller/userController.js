@@ -3,40 +3,28 @@ const user = require('../models/userSchema')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const bcrypt = require('bcrypt')
 const logger = require("../utlis/logger")
-// const { google } = require('googleapis')
+
 const twilio = require('twilio');
-const config = require('../config/config')
-// const authentication = async () => {
-//     const auth = new google.auth.GoogleAuth({
-//         keyFile: "keys.json",
-//         scopes: "https://www.googleapis.com/auth/spreadsheets"
-//     });
-//     const client = await auth.getClient();
-//     const sheets = google.sheets({
-//         version: 'v4',
-//         auth: client
-//     });
-//     return { sheets }
-// }
-// 
-// const id = "1Xz0Lk-00EXSJZXY2dqR_fZjpH-GhJP9lzFiZe5yAlYo"// spreadsheet 
+const config = require('../config/config');
+const detailSchema = require('../models/detailSchema');
 
 //registring the user 
 
 exports.registeruser = catchAsyncErrors(async (req, res) => {
     try {
+        console.log(req.body)
         // validating the proper body
         const {
-            Name, email, phone, location, dogName, dogBreed, dogAge, message, role, password, leadFor, leadType
+            Name, email, phone, location, dogName, dogBreed, dogAge, message, role, password, leadFor, leadType, isdisable
         } = req.body
         // twillo
-        const accountSid = config.twilioSid;
-        const authToken = config.twilloAuthToken;
+        const accountSid = 'AC251f9256e0c54578448744c115236915';
+        const authToken = "b5f7714b619d78068f202111b53abd20";
         // const client = twilio(accountSid, authToken);
 
 
         const client = twilio(accountSid, authToken);
-
+        // console.log(client,'client')
 
         const finduser = await user.findOne({ phone: phone })
         if (finduser) {
@@ -47,7 +35,7 @@ exports.registeruser = catchAsyncErrors(async (req, res) => {
             return
         }
         const createUser = await user.create({
-            Name, email, phone, location, dogName, dogBreed, dogAge, message, role, password, leadFor, leadType
+            Name, email, phone, location, dogName, dogBreed, dogAge, message, role, password, leadFor, leadType, isdisable
         })
 
         if (!createUser) {
@@ -68,18 +56,18 @@ exports.registeruser = catchAsyncErrors(async (req, res) => {
             const customerMessage = `
             Greeting From Pet Whisperer 
 Thank you for contacting.
-We will contact you soon in next 12 hours.`;
+We will contact you soon in next 24 hours.`;
             client.messages.create({
                 body: customerMessage,
-                from: config.twilloNumber,
+                from: "+13029244725",
                 to: `+91${phone}` // The customer's phone number
             })
                 .then(message => console.log('Message sent to the customer:', message.sid))
                 .catch(error => console.log('Error sending message to the customer:', error));
 
             // Send message to the admin
-            const adminMessage = `Hi The Pet Whisperer :
-New Inquiry has made
+            const adminMessage = `Hi The Pet Whisperer
+Hurry ! New Inquiry
 Name: ${Name}
 Email: ${email}
 Phone: ${phone}
@@ -90,8 +78,8 @@ Dog Age: ${dogAge}
 Message: ${message}`;
             client.messages.create({
                 body: adminMessage,
-                from: config.twilloNumber,
-                to: config.number // The admin's phone number
+                from: "+13029244725",
+                to: "+918108837503" // The admin's phone number
             })
                 .then(message => console.log('Message sent to the admin:', message.sid))
                 .catch(error => console.log('Error sending message to the admin:', error));
@@ -135,10 +123,6 @@ exports.login = catchAsyncErrors(async (req, res) => {
             });
             return
         }
-        // if user is insactive then dont login
-        // console.log(finduser)
-
-
         let passwordData
         let data1
         finduser && finduser.map((i) => {
@@ -215,3 +199,46 @@ exports.getAllUser = catchAsyncErrors(async (req, res) => {
         })
     }
 })
+
+exports.updateUser = catchAsyncErrors(async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const updatedData = req.body;
+
+        const updatedUser = await user.findByIdAndUpdate(userId, updatedData, {
+            new: true, // To return the updated user
+            runValidators: true, // To run validators on the updated data
+        });
+
+        if (!updatedUser) {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+            return;
+        }
+
+        // Check if lead is positive
+        if (updatedUser.leadType === "positive") {
+            // Create detail schema
+            const newDetail = await detailSchema.create(updatedData);
+            res.status(200).json({
+                success: true,
+                message: "User updated successfully",
+                data: { updatedUser, newDetail },
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: "User updated successfully",
+                data: updatedUser,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            data: error,
+        });
+    }
+});

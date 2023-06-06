@@ -64,36 +64,38 @@ app.get('/', (req, res) => {
 // 
 
 
-const s3 = new AWS.S3({
-    accessKeyId: config.accessKeyId,
-    secretAccessKey: config.secretAccessKey,
-    // region: 'YOUR_AWS_REGION'
-    apiVersion: '2006-03-01' // Add this line
+// const s3 = new AWS.S3({
+//     accessKeyId: config.accessKeyId,
+//     secretAccessKey: config.secretAccessKey,
+//     // region: 'YOUR_AWS_REGION'
+//     apiVersion: '2006-03-01' // Add this line
 
-});
+// });
 
-// Configure Multer middleware
-const upload = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: 'thepetwhisperervideos',
-        acl: 'public-read',
-        metadata: function (req, file, cb) {
-            cb(null, { fieldName: file.fieldname });
-        },
-        key: function (req, file, cb) {
-            cb(null, Date.now().toString()); // Use a unique key for each file
-        }
-    })
-});
+// // Configure Multer middleware
+// const upload = multer({
+//     storage: multerS3({
+//         s3: s3,
+//         bucket: 'thepetwhisperervideos',
+//         acl: 'public-read',
+//         metadata: function (req, file, cb) {
+//             cb(null, { fieldName: file.fieldname });
+//         },
+//         key: function (req, file, cb) {
+//             cb(null, Date.now().toString()); // Use a unique key for each file
+//         }
+//     })
+// });
 // console.log(upload,'upload')
-const blogRoutes = require('./routes/blogRoutes');
-
+const blogRoutes = require('./routes/VideoRoutes');
+const details = require('./routes/detailsRoutes')
 // app.use(apiProxy);
 app.use('/api/v1', blogRoutes);
 app.use('/api/v1', userRoutes)
 app.use('/api/v1',videos)
-app.post('/upload', upload.single('video'), videoController.uploadVideo);
+app.use('/api/v1',details)
+
+// app.post('/api/v1', upload.single('video'), videoController.uploadVideo);
 
 // app.use(`/.netlify/functions/api`, userRoutes);
 

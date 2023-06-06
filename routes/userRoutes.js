@@ -11,4 +11,6 @@ router.post('/login',userController.login)
 
 router.get('/all/user',userController.getAllUser)
 
+router.put('/update/:id',userController.updateUser)
+
 module.exports = router
