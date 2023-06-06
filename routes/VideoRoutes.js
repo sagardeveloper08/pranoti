@@ -1,9 +1,14 @@
-const videos = require('../controller/videoController')
-const {isAuthenticated} = require('../middleware/Auth')
-const { authorizeRoles } = require('../middleware/Auth')
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+const blogController = require('../controller/videoController');
 
-router.get('/videos/all',videos.getvideo)
+// Define routes for the blog
+router.post('/upload', blogController.uploadVideo);
 
-module.exports = router
+router.get('/videos',blogController.getAllVideos)
+
+router.get('/videos/social/:contentType',blogController.getContent)
+
+router.delete('/delete/videos/:id',blogController.deleteVideo)
+
+module.exports = router;

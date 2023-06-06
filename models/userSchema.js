@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        default:"the_pet_Whisperer@1237896"
+        default: "the_pet_Whisperer@1237896"
     },
     role: {
         type: String,
@@ -50,15 +50,18 @@ const userSchema = new mongoose.Schema({
     leadFor: {
         type: String,
         enum: ['homeboarding', 'pet_training'],
-        default:"pet_training"
+        default: "pet_training"
     },
     leadType: {
         type: String,
         enum: ['contact', 'trail', 'postive', 'negative'],
-        default:'contact'
+        default: 'contact'
     },
     created_at: { type: Date, default: Date.now },
-
+    isdisable: {
+        type: Boolean,
+        default:false
+    }
 },
     { timestamps: true }
 )
